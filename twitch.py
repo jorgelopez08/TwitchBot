@@ -8,7 +8,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config import driverPath, profile
-from time import sleep
+from datetime import datetime
+from time import sleep, time
 
 import secret
 
@@ -17,7 +18,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
-        #option.add_argument('--headless')  
+        option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
         global bot
@@ -56,8 +57,8 @@ class TwitchBot():
         while True:
             self.__enter_stream()   
             online = self.__is_online()
-            loged_in = self.__is_loged_in()
             if online:
+                loged_in = self.__is_loged_in()
                 if not loged_in:
                     self.__login()
                 while online:
@@ -72,11 +73,13 @@ class TwitchBot():
 
     def __is_online(self):
         try:
-            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.CLASS_NAME, 'tw-channel-status-text-indicator')))
-            print(f'{self.user} is online')
+            wait = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
+            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, wait)))
+            print(f'{self.user} is online, {datetime.now()}')
             return True
+            
         except TimeoutException:
-            print(f"{self.user} is not online!")
+            print(f"{self.user} is not online! {datetime.now()}")
             return False 
             
     def __collect_coins(self):
@@ -84,7 +87,7 @@ class TwitchBot():
         try:
             WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, button))).click()
             #bot.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span').click()
-            print('Coin Collected')
+            print(f'Coin Collected {datetime.now()}')
             return False
         except TimeoutException:
             return True
@@ -97,12 +100,13 @@ class TwitchBot():
 
 
     def __close_stream(self):
-        bot.close()
+        bot.get("https://google.com")
+        sleep(60*120)
     
 
 if __name__ == "__main__":
-    #twitch = TwitchBot("mym_alkapone")
-    twitch = TwitchBot("esl_csgo")
+    twitch = TwitchBot("mym_alkapone")
+    #twitch = TwitchBot("esl_csgo")
 
     twitch.watch_stream()
     
