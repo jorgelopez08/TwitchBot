@@ -53,14 +53,17 @@ class TwitchBot():
 
     def watch_stream(self):
         coin = True
+        i = 0
         #self.__enter_stream()
         while True:
             self.__enter_stream()   
             online = self.__is_online()
+            
             if online:
                 loged_in = self.__is_loged_in()
                 if not loged_in:
                     self.__login()
+
                 while online:
                     if coin:
                         coin = self.__collect_coins()
@@ -68,13 +71,18 @@ class TwitchBot():
                         print('hola')
                         sleep(15*60)
                         coin = True
+
+                    i+=1
+                    if i > 5:
+                        i = 0
+                        online = self.__is_online()
             else:
                 self.__close_stream()
 
     def __is_online(self):
         try:
-            wait = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
-            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, wait)))
+            login_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
+            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, login_button)))
             print(f'{self.user} is online, {datetime.now()}')
             return True
             
