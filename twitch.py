@@ -18,7 +18,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
-        option.add_argument('--headless')  
+        #option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
         global bot
