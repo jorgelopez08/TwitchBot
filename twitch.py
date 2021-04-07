@@ -18,6 +18,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
+        option.add_argument('--disable-dev-shm-usage')
         #option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
@@ -58,7 +59,7 @@ class TwitchBot():
         while True:
             self.__enter_stream()   
             online = self.__is_online()
-            
+
             if online:
                 loged_in = self.__is_loged_in()
                 if not loged_in:
