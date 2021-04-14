@@ -1,6 +1,6 @@
 import requests
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementNotInteractableException, TimeoutException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common import by
 from selenium.webdriver.common.by import By
@@ -18,8 +18,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
-        option.add_argument('--disable-dev-shm-usage')
-        #option.add_argument('--headless')  
+        option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
         global bot
@@ -94,8 +93,12 @@ class TwitchBot():
     def __collect_coins(self):
         button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span'
         try:
-            WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, button))).click()
-            #bot.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span').click()
+            try:
+                WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, button))).click()
+                #bot.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span').click()
+            except ElementNotInteractableException:
+                pass
+            
             print(f'Coin Collected {datetime.now()}')
             return False
         except TimeoutException:
