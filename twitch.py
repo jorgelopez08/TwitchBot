@@ -69,7 +69,7 @@ class TwitchBot():
                     if coin:
                         coin = self.__collect_coins()
                     else:
-                        print('hola')
+                        print('Waiting...')
                         sleep(15*60)
                         coin = True
 
