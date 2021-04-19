@@ -1,10 +1,7 @@
 import requests
 from selenium import webdriver
 from selenium.common.exceptions import ElementNotInteractableException, TimeoutException
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.common import by
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from config import driverPath, profile
@@ -18,7 +15,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
-        option.add_argument('--headless')  
+        #option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
         global bot
@@ -100,9 +97,10 @@ class TwitchBot():
                 pass
             
             print(f'Coin Collected {datetime.now()}')
-            return False
+
         except TimeoutException:
-            return True
+            print(f'Coin not available {datetime.now()}')
+        return False
 
         """ reward_button = bot.find_element_by_xpath(button)
         reward_button.click()
@@ -117,8 +115,7 @@ class TwitchBot():
     
 
 if __name__ == "__main__":
-    twitch = TwitchBot("mym_alkapone")
-    #twitch = TwitchBot("esl_csgo")
+    #twitch = TwitchBot("mym_alkapone")
+    twitch = TwitchBot("esl_csgo")
 
     twitch.watch_stream()
-    
