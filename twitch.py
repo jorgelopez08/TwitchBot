@@ -71,18 +71,18 @@ class TwitchBot():
                         print('Waiting...')
                         sleep(15*60)
                         coin = True
+                        i+=1
 
-                    i+=1
                     if i > 5:
                         i = 0
-                        online = self.__is_online()
+                        break
             else:
                 self.__close_stream()
 
     def __is_online(self):
         try:
-            login_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
-            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, login_button)))
+            online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
+            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, online_button)))
             print(f'{self.user} is online, {datetime.now()}')
             return True
             
