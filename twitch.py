@@ -15,7 +15,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
-        option.add_argument('--headless')  
+        #option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
         global bot
@@ -78,8 +78,9 @@ class TwitchBot():
 
     def __is_online(self):
         try:
-            online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
-            WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, online_button)))
+            #online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
+            online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/div/a/div[2]/div/div/div/div/p'
+            WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, online_button)))
             print(f'{self.user} is online, {datetime.now()}')
             return True
             
@@ -115,7 +116,7 @@ class TwitchBot():
     
 
 if __name__ == "__main__":
-    #twitch = TwitchBot("mym_alkapone")
-    twitch = TwitchBot("esl_csgo")
+    twitch = TwitchBot("mym_alkapone")
+    #twitch = TwitchBot("esl_csgo")
 
     twitch.watch_stream()
