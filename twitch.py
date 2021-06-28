@@ -89,10 +89,11 @@ class TwitchBot():
             return False 
             
     def __collect_coins(self):
-        button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span'
+        #button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span'
+        button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button'
         try:
             try:
-                WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, button))).click()
+                WebDriverWait(bot, 15).until(EC.presence_of_element_located((By.XPATH, button))).click()
                 #bot.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span').click()
             except ElementNotInteractableException:
                 pass
@@ -102,10 +103,6 @@ class TwitchBot():
         except TimeoutException:
             print(f'Coin not available {datetime.now()}')
         return False
-
-        """ reward_button = bot.find_element_by_xpath(button)
-        reward_button.click()
-        return False """
             
 
 
