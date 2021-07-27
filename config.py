@@ -6,7 +6,7 @@ so = platform.system()
 
 def driverPath():
     if so == 'Darwin':
-        driver_path = '/Users/jorgelopez/Developer/Drivers/chromedriver'
+        driver_path = '/Users/jorgelopez/Developer/Chromedriver/chromedriver'
     elif so == 'Windows':
         driver_path = 'D:\\chromedriver.exe'
     elif so == 'Linux':
