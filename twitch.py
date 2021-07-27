@@ -113,7 +113,7 @@ class TwitchBot():
 
     def __close_stream(self):
         bot.get("https://google.com")
-        sleep(60*120)
+        sleep(60*60)
     
 
 if __name__ == "__main__":
