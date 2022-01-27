@@ -12,6 +12,15 @@ HOUR = 60**2
 class Twitch:
     _stream = False
     def __init__(self, user,username, password, driver_path, display):
+        """Twitch bot
+
+        Args:
+            user (str): Channel username
+            username (str): Login username
+            password (str): User password
+            driver_path (str): Webdriver path
+            display (bool): Set True to show graphic bot or False to not show it
+        """
         global bot
         self.user = user
         self.username = username
