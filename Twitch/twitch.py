@@ -7,17 +7,18 @@ from Twitch.config import profile
 from datetime import datetime
 from time import sleep
 
-import secret
 HOUR = 60**2
 
 class Twitch:
     _stream = False
-    def __init__(self, user, driver_path, display):
+    def __init__(self, user,username, password, driver_path, display):
         global bot
         self.user = user
+        self.username = username
+        self.password = password
         option = webdriver.ChromeOptions()
         if not display:
-            option.add_argument('--headless')  
+            option.add_argument('--headless')
         option.add_argument(profile())
 
         bot = webdriver.Chrome(
@@ -34,11 +35,11 @@ class Twitch:
         login_button = bot.find_element_by_xpath('//*[@id="root"]/div/div[2]/nav/div/div[3]/div[3]/div/div[1]/div[1]/button/div/div')
         login_button.click()
         sleep(2)
-        user = bot.find_element_by_id('login-username')
-        user.send_keys(secret.usr)
+        username = bot.find_element_by_id('login-username')
+        username.send_keys(self.username)
         sleep(1)
         psswd = bot.find_element_by_id('password-input')
-        psswd.send_keys(secret.psswd)
+        psswd.send_keys(self.password)
         sleep(1)
         login_button = bot.find_element_by_xpath('/html/body/div[3]/div/div/div/div/div/div[1]/div/div/div[3]/form/div/div[3]/button/div/div')
         login_button.click()
