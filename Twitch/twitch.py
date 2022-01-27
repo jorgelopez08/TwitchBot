@@ -1,31 +1,38 @@
-import requests
 from selenium import webdriver
 from selenium.common.exceptions import ElementNotInteractableException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from config import driverPath, profile
+from Twitch.config import profile
 from datetime import datetime
-from time import sleep, time
+from time import sleep
 
 import secret
+HOUR = 60**2
 
-class TwitchBot():
+class Twitch:
     _stream = False
-    def __init__(self, user):
+    def __init__(self, user, driver_path, display):
+        global bot
         self.user = user
         option = webdriver.ChromeOptions()
-        option.add_argument('--headless')  
+        if not display:
+            option.add_argument('--headless')  
         option.add_argument(profile())
-        self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
-        global bot
-        bot = self.bot
+
+        bot = webdriver.Chrome(
+            executable_path=driver_path, 
+            options=option
+        )
+        
         self.url = "https://www.twitch.tv/" + user
 
-    def __login(self):
+    def login(self):
+        """Login
+        Log in into Twitch Account
+        """
         login_button = bot.find_element_by_xpath('//*[@id="root"]/div/div[2]/nav/div/div[3]/div[3]/div/div[1]/div[1]/button/div/div')
         login_button.click()
-
         sleep(2)
         user = bot.find_element_by_id('login-username')
         user.send_keys(secret.usr)
@@ -36,7 +43,12 @@ class TwitchBot():
         login_button = bot.find_element_by_xpath('/html/body/div[3]/div/div/div/div/div/div[1]/div/div/div[3]/form/div/div[3]/button/div/div')
         login_button.click()
 
-    def __is_loged_in(self):
+    def is_loged_in(self):
+        """Is loged in
+
+        Returns:
+            bool: Return True or False depending on account status
+        """
         try:
             WebDriverWait(bot, 4).until(EC.presence_of_element_located((By.XPATH, '//*[@id="root"]/div/div[2]/nav/div/div[3]/div[3]/div/div[1]/div[1]/button/div/div')))
             return False
@@ -44,14 +56,12 @@ class TwitchBot():
             print('Alredy loged in')
             return True
 
-    def __enter_stream(self):
+    def enter_stream(self):
         bot.get(self.url)
-        #bot.find_element_by_class_name('tw-channel-status-text-indicator')
 
     def watch_stream(self):
         coin = True
         i = 0
-        #self.__enter_stream()
         while True:
             self.__enter_stream()   
             online = self.__is_online()
@@ -68,33 +78,34 @@ class TwitchBot():
                         print('Waiting...')
                         sleep(15*60)
                         coin = True
-                        i+=1
-
-                    if i > 5:
-                        i = 0
-                        break
+                        if not self.__is_online():
+                            break
             else:
                 self.__close_stream()
 
-    def __is_online(self):
+    def is_online(self):
         try:
-            #online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
-            online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/div/a/div[2]/div/div/div/div/p'
+            online_button = '//div[@aria-label="Channel is Live"]'
             WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, online_button)))
             print(f'{self.user} is online, {datetime.now()}')
             return True
-            
         except TimeoutException:
             print(f"{self.user} is not online! {datetime.now()}")
             return False 
+    
+    def online(self):
+        try:
+            online_button = '//div[@aria-label="Channel is Live"]'
+            WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, online_button)))
+            return True
+        except TimeoutException:
+            return False 
             
-    def __collect_coins(self):
-        #button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span'
-        button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button'
+    def collect_coins(self):
+        button = "//button[@aria-label='Claim Bonus']"
         try:
             try:
                 WebDriverWait(bot, 15).until(EC.presence_of_element_located((By.XPATH, button))).click()
-                #bot.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span').click()
             except ElementNotInteractableException:
                 pass
             
@@ -103,17 +114,15 @@ class TwitchBot():
         except TimeoutException:
             print(f'Coin not available {datetime.now()}')
         return False
-            
 
-
-
-    def __close_stream(self):
+    def close_stream(self):
         bot.get("https://google.com")
-        sleep(60*60)
+        sleep(60**2)
     
+    def __del__(self):
+        print("Stream closed")
+        bot.quit()
+        sleep(HOUR * 4)
 
-if __name__ == "__main__":
-    twitch = TwitchBot("mym_alkapone")
-    #twitch = TwitchBot("esl_csgo")
-
-    twitch.watch_stream()
+    def exit(self):
+        bot.quit()
