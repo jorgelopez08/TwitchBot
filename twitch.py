@@ -15,7 +15,7 @@ class TwitchBot():
     def __init__(self, user):
         self.user = user
         option = webdriver.ChromeOptions()
-        option.add_argument('--headless')  
+        #option.add_argument('--headless')  
         option.add_argument(profile())
         self.bot = webdriver.Chrome(executable_path=driverPath() ,options=option)
         global bot
@@ -79,7 +79,8 @@ class TwitchBot():
     def __is_online(self):
         try:
             #online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
-            online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/div/a/div[2]/div/div/div/div/p'
+            #online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/div/a/div[2]/div/div/div/div/p'
+            online_button = '//div[@aria-label="Channel is Live"]'
             WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, online_button)))
             print(f'{self.user} is online, {datetime.now()}')
             return True
@@ -89,8 +90,8 @@ class TwitchBot():
             return False 
             
     def __collect_coins(self):
-        #button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span'
-        button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button'
+        #button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button'
+        button = "//button[@aria-label='Claim Bonus']"
         try:
             try:
                 WebDriverWait(bot, 15).until(EC.presence_of_element_located((By.XPATH, button))).click()
