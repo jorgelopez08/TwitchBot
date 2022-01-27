@@ -1,9 +1,8 @@
-from selenium import webdriver
 from selenium.common.exceptions import ElementNotInteractableException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Twitch.config import profile
+
 from datetime import datetime
 from time import sleep
 
@@ -11,29 +10,20 @@ HOUR = 60**2
 
 class Twitch:
     _stream = False
-    def __init__(self, user,username, password, driver_path, display):
+    def __init__(self, driver, user, username, password):
         """Twitch bot
 
         Args:
+            driver (WebDriver): Webdriver Object
             user (str): Channel username
             username (str): Login username
             password (str): User password
-            driver_path (str): Webdriver path
-            display (bool): Set True to show graphic bot or False to not show it
         """
         global bot
         self.user = user
         self.username = username
         self.password = password
-        option = webdriver.ChromeOptions()
-        if not display:
-            option.add_argument('--headless')
-        option.add_argument(profile())
-
-        bot = webdriver.Chrome(
-            executable_path=driver_path, 
-            options=option
-        )
+        bot = driver
         
         self.url = "https://www.twitch.tv/" + user
 

@@ -1,17 +1,30 @@
+from selenium import webdriver
+from Twitch.config import profile
 from . import twitch
 from time import sleep
 
 class TwitchBot:
-    def __init__(self, user,driver, display=False):
+    def __init__(self, user,username, password, driver, display=False):
         self.user = user
         self.driver = driver
         self.display = display
+        self.password = password
+        self.username = username
+        self.option = webdriver.ChromeOptions()
+        if not self.display:
+            self.option.add_argument('--headless')
+        self.option.add_argument(profile())
+
 
     def infinite_coin_collector(self):
         bot = twitch.Twitch(
+            driver=webdriver.Chrome(
+            executable_path=self.driver, 
+            options=self.option
+            ),   
             user=self.user,
-            driver_path=self.driver,
-            display=self.display
+            username=self.username,
+            password=self.password
         )
 
         coin = True
@@ -42,10 +55,14 @@ class TwitchBot:
     
     def watch_stream(self):
         bot = twitch.Twitch(
-                    user=self.user,
-                    driver_path=self.driver,
-                    display=self.display
-                )
+            driver=webdriver.Chrome(
+            executable_path=self.driver, 
+            options=self.option
+            ),   
+            user=self.user,
+            username=self.username,
+            password=self.password,
+        )
 
         coin = True
         while True:
