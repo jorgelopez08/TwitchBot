@@ -25,7 +25,6 @@ class TwitchBot():
     def __login(self):
         login_button = bot.find_element_by_xpath('//*[@id="root"]/div/div[2]/nav/div/div[3]/div[3]/div/div[1]/div[1]/button/div/div')
         login_button.click()
-
         sleep(2)
         user = bot.find_element_by_id('login-username')
         user.send_keys(secret.usr)
@@ -46,12 +45,10 @@ class TwitchBot():
 
     def __enter_stream(self):
         bot.get(self.url)
-        #bot.find_element_by_class_name('tw-channel-status-text-indicator')
 
     def watch_stream(self):
         coin = True
         i = 0
-        #self.__enter_stream()
         while True:
             self.__enter_stream()   
             online = self.__is_online()
@@ -78,8 +75,6 @@ class TwitchBot():
 
     def __is_online(self):
         try:
-            #online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/a/div[2]/div/div/div'
-            #online_button = '//*[@id="root"]/div/div[2]/div/main/div[2]/div[3]/div/div/div[1]/div[1]/div[2]/div/div[1]/div/div/div/div[1]/div/div/div/a/div[2]/div/div/div/div/p'
             online_button = '//div[@aria-label="Channel is Live"]'
             WebDriverWait(bot, 10).until(EC.presence_of_element_located((By.XPATH, online_button)))
             print(f'{self.user} is online, {datetime.now()}')
@@ -90,12 +85,11 @@ class TwitchBot():
             return False 
             
     def __collect_coins(self):
-        #button = '/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button'
+        
         button = "//button[@aria-label='Claim Bonus']"
         try:
             try:
                 WebDriverWait(bot, 15).until(EC.presence_of_element_located((By.XPATH, button))).click()
-                #bot.find_element_by_xpath('/html/body/div[1]/div/div[2]/div/div[2]/div/div[1]/div/div/div/div/div/section/div/div[5]/div[2]/div[2]/div[1]/div/div/div/div[2]/div/div/div/button/span').click()
             except ElementNotInteractableException:
                 pass
             
@@ -104,13 +98,10 @@ class TwitchBot():
         except TimeoutException:
             print(f'Coin not available {datetime.now()}')
         return False
-            
-
-
 
     def __close_stream(self):
         bot.get("https://google.com")
-        sleep(60*60)
+        sleep(60**2)
     
 
 if __name__ == "__main__":
