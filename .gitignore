@@ -1,6 +1,7 @@
 /venv/
 secret.py
 /__pycache__/
-Twitch/Users/
+Twitch/chrome_profile/
 .venv/
 main.py
+todo
