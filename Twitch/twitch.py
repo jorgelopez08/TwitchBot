@@ -1,10 +1,9 @@
-import requests
 from selenium import webdriver
 from selenium.common.exceptions import ElementNotInteractableException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from config import driverPath, profile
+from Twitch.config import driverPath, profile
 from datetime import datetime
 from time import sleep, time
 

@@ -1,5 +1,6 @@
 /venv/
 secret.py
 /__pycache__/
-Users/
+Twitch/Users/
 .venv/
+main.py
